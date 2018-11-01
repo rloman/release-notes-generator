@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+"use strict"
 
 var stdin = process.stdin,
     stdout = process.stdout,
@@ -16,22 +17,27 @@ stdin.on('data', function (chunk) {
     });
 });
 
-stdin.on('end', function () {
+function* getCommitsFiltered() {
   let counter = 0;
-    inputChunks.forEach(line => {
+    for(let line of inputChunks) {
       let noray = /(^Raymond Loman|Prepare for the next|Bump up the version)/;
       if(!noray.test(line)) {
-
         let re = /(\d{4})-(\d{2})-(\d{2})T(\d{2}:\d{2}:\d{2}\+\d{2}:\d{2})\s(.*)/;
         if(re.test(line)) {
           let [_, year, month, day, timestamp, subject] = re.exec(line);
           if(counter == 0) {
-            stdout.write("."+version+" ("+day+"-"+month+"-"+year+")\n");
+            yield "."+version+" ("+day+"-"+month+"-"+year+")\n";
             counter++;
           }
-          stdout.write("* "+subject);
-          stdout.write('\n');
+          yield "* "+subject;
+          yield '\n';
         }
       }
-    });
+    }
+}
+
+stdin.on('end', function () {
+  for(let line of getCommitsFiltered()) {
+    stdout.write(line);
+  }
 });
