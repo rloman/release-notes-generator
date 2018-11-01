@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+"use strict"
+
 var stdin = process.stdin,
     stdout = process.stdout,
     inputChunks = [];
@@ -19,7 +21,7 @@ stdin.on('data', function (chunk) {
 function* getLines() {
   console.log("in get lines")
   let counter = 0;
-    inputChunks.forEach(function* (line) {
+    for(let line of inputChunks) {
       let noray = /(^Raymond Loman|Prepare for the next|Bump up the version)/;
       if(!noray.test(line)) {
 
@@ -35,14 +37,14 @@ function* getLines() {
           yield '\n';
         }
       }
-    });
+    }
 }
 
 stdin.on('end', function () {
 
   console.log("ending ... ");
 
-  for(line of getLines()) {
+  for(let line of getLines()) {
     stdout.write(line);
   }
 });
