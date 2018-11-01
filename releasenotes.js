@@ -17,7 +17,7 @@ stdin.on('data', function (chunk) {
     });
 });
 
-function* getLines() {
+function* getCommitsFiltered() {
   let counter = 0;
     for(let line of inputChunks) {
       let noray = /(^Raymond Loman|Prepare for the next|Bump up the version)/;
@@ -37,7 +37,7 @@ function* getLines() {
 }
 
 stdin.on('end', function () {
-  for(let line of getLines()) {
+  for(let line of getCommitsFiltered()) {
     stdout.write(line);
   }
 });
