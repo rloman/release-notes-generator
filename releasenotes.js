@@ -17,8 +17,9 @@ stdin.on('data', function (chunk) {
 });
 
 function* getLines() {
+  console.log("in get lines")
   let counter = 0;
-    inputChunks.forEach(line => {
+    inputChunks.forEach(function* (line) {
       let noray = /(^Raymond Loman|Prepare for the next|Bump up the version)/;
       if(!noray.test(line)) {
 
@@ -30,6 +31,7 @@ function* getLines() {
             counter++;
           }
           yield "* "+subject;
+          console.log(subject);
           yield '\n';
         }
       }
@@ -37,6 +39,8 @@ function* getLines() {
 }
 
 stdin.on('end', function () {
+
+  console.log("ending ... ");
 
   for(line of getLines()) {
     stdout.write(line);
