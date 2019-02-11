@@ -26,6 +26,14 @@ function* getCommitsFiltered() {
         if(re.test(line)) {
           let [_, year, month, day, timestamp, subject] = re.exec(line);
           if(counter == 0) {
+            yield "\n";
+            yield "== News Flash\n";
+            yield "\n";
+            yield "."+day+"-"+month+"-"+year+"\n";
+            yield "* Released version "+version+"\n";
+            yield "\n";
+            yield "== Release notes\n";
+            yield "\n";
             yield "."+version+" ("+day+"-"+month+"-"+year+")\n";
             counter++;
           }
